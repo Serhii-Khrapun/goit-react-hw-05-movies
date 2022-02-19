@@ -16,3 +16,16 @@ export const movieDetails = id => {
   return axios.get(`
 https://api.themoviedb.org/3/movie/${id}?api_key=${key}&language=en-US`);
 };
+
+export const movieActors = id => {
+  return axios.get(
+    `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${key}&language=en-US`,
+  );
+};
+
+export const movieReviews = async id => {
+  const response = await axios.get(
+    `https://api.themoviedb.org/3/movie/${id}/reviews?api_key=${key}&language=en-US&page=1`,
+  );
+  return response.data;
+};
