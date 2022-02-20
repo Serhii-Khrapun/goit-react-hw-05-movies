@@ -1,26 +1,35 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { searchMovie } from '../../services/movies-api';
 import styles from './MoviesPage.module.css';
 
 const MoviesPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
-  const searchQueryChange = event => {
-    setSearchQuery(event.currentTarget.value.toLowerCase());
-  };
-  const handleSubmit = event => {
-    event.preventDefault();
-    if (searchQuery.trim() === '') {
-      return alert('Введіть пошуковий запит!');
+  const [filter, setFilter] = useState('');
+  const [searchResults, setSearchResults] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams({});
+
+  useEffect(() => {
+    if (searchQuery === '') {
+      return;
     }
-    movie(searchQuery);
-    setSearchQuery('');
-  };
-  const movie = searchQuery => {
+    setSearchParams({ query: searchQuery });
     searchMovie(searchQuery).then(res => {
       setSearchResults([...res.data.results]);
     });
+  }, [searchQuery]);
+
+  const searchQueryChange = event => {
+    setFilter(event.currentTarget.value.toLowerCase());
+  };
+  const handleSubmit = event => {
+    event.preventDefault();
+    if (filter.trim() === '') {
+      return alert('Введіть пошуковий запит!');
+    }
+    setSearchQuery(filter);
+
+    setFilter('');
   };
 
   return (
@@ -32,20 +41,23 @@ const MoviesPage = () => {
           autoComplete="off"
           autoFocus
           placeholder="Search movie"
-          value={searchQuery}
+          value={filter}
           onChange={searchQueryChange}
         />
         <button type="submit" className={styles.SearchForm_button}>
           Search
         </button>
       </form>
-      <ul>
-        {searchResults.map(movie => (
-          <li key={movie.id}>
-            <Link to={`/movies/${movie.id}`}>{movie.title || movie.name}</Link>
-          </li>
-        ))}
-      </ul>
+      {searchResults && searchResults.length > 0 && (
+        <ul>
+          {searchResults.map(movie => (
+            <li key={movie.id}>
+              <Link to={`/movies/${movie.id}`}>{movie.title || movie.name}</Link>
+            </li>
+          ))}
+        </ul>
+      )}
+      {searchResults && searchResults.length === 0 && <p>Nothing found for your request</p>}
     </div>
   );
 };

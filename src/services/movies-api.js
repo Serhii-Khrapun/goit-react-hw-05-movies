@@ -12,20 +12,30 @@ export const searchMovie = query => {
   );
 };
 
-export const movieDetails = id => {
-  return axios.get(`
+export const movieDetails = async id => {
+  const response = await axios.get(`
 https://api.themoviedb.org/3/movie/${id}?api_key=${key}&language=en-US`);
+  let data = {};
+  data = response.data;
+  return data;
 };
 
-export const movieActors = id => {
-  return axios.get(
+export const movieActors = async id => {
+  const response = await axios.get(
     `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${key}&language=en-US`,
   );
+  let data = {};
+  data = response.data;
+  return data;
 };
 
 export const movieReviews = async id => {
   const response = await axios.get(
     `https://api.themoviedb.org/3/movie/${id}/reviews?api_key=${key}&language=en-US&page=1`,
   );
-  return response.data;
+  const data = [];
+  response.data.results.map(result => {
+    data.push(result);
+  });
+  return data;
 };

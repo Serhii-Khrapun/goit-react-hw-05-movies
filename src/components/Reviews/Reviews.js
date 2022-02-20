@@ -4,24 +4,28 @@ import { useState, useEffect } from 'react';
 import styles from './Reviews.module.css';
 
 const Reviews = () => {
-  const [reviews, setReviews] = useState(null);
   const { movieId } = useParams();
+  const [reviews, setReviews] = useState(null);
   useEffect(() => {
-    movieReviews(movieId).then(reviews => {
-      setReviews(reviews);
+    movieReviews(movieId).then(res => {
+      setReviews(res);
     });
   }, [movieId]);
-  console.log(reviews);
+
   return (
-    <ul>
-      {reviews.results.total_results > 0 &&
-        reviews.results.map(result => (
-          <li key={result.id}>
-            <h3>Author: {result.author}</h3>
-            <p className={styles.review_content}>{result.content}</p>
-          </li>
-        ))}
-    </ul>
+    <>
+      {reviews && reviews.length > 0 && (
+        <ul>
+          {reviews.map(result => (
+            <li key={result.id}>
+              <h3>Author: {result.author}</h3>
+              <p className={styles.review_content}>{result.content}</p>
+            </li>
+          ))}
+        </ul>
+      )}
+      {reviews && reviews.length === 0 && <p>No reviews found</p>}
+    </>
   );
 };
 export default Reviews;
