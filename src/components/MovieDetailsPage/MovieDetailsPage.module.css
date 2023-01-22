@@ -1,0 +1,19 @@
+.movie_container {
+    margin-top: 20px;
+    margin-left: 10px;
+}
+
+.movie_details {
+    display: flex;
+    border-bottom: 2px solid grey;
+    box-shadow: 0px 5px 5px grey;
+}
+
+.movie_info {
+    margin-left: 10px;
+    padding-right: 15px;
+}
+
+.movie_additional {
+    border-bottom: 2px solid grey;
+}
