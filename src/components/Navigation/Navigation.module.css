@@ -17,7 +17,7 @@
 }
 
 .header__activeLink {
-    composes: header__link;
+   
     color: rgb(243, 76, 10);
     font-size: 20px;
     font-weight: 700;

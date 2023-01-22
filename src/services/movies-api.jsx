@@ -37,7 +37,7 @@ export const movieReviews = async id => {
   );
   const data = [];
   response.data.results.map(result => {
-    data.push(result);
+    return data.push(result);
   });
   return data;
 };
